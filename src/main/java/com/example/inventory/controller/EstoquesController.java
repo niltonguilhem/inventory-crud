@@ -1,20 +1,20 @@
 package com.example.inventory.controller;
 
 import com.example.inventory.domain.Estoque;
-import com.example.inventory.domain.EstoqueService;
+import com.example.inventory.service.EstoqueService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/estoques")
 public class EstoquesController {
-    private EstoqueService service = new EstoqueService();
+    @Autowired
+    private EstoqueService service;
 
     @GetMapping()
-    public List<Estoque> get(){
+    public Iterable<Estoque> get(){
         return service.getEstoques();
     }
 }
