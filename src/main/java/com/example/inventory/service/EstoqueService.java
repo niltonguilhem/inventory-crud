@@ -20,7 +20,7 @@ public class EstoqueService {
         return rep.findAll();
     }
 
-    public Optional<Estoque> getEstoqueByid(Long id){return rep.findById(id);}
+    public Optional<Estoque> getEstoqueById(Long id){return rep.findById(id);}
 
     public Iterable<Estoque> getEstoqueByFabricante(String fabricante) {return  rep.findByFabricante(fabricante);}
 
@@ -34,10 +34,10 @@ public class EstoqueService {
    }
 
    public Estoque update(Estoque estoque,Long id) {
-        Assert.notNull(id,"Não foi possível atualiza o registro");
+        Assert.notNull(id,"Não foi possível atualizar o registro");
 
         //Busca o item no banco de dados estoque
-       Optional<Estoque> optional = getEstoqueByid(id);
+       Optional<Estoque> optional = getEstoqueById(id);
        if (optional.isPresent()){
            Estoque db = optional.get();
            //Copiar as propriedades
@@ -56,7 +56,7 @@ public class EstoqueService {
    }
 
    public void delete(Long id){
-        Optional<Estoque> estoque = getEstoqueByid(id);
+        Optional<Estoque> estoque = getEstoqueById(id);
         if (estoque.isPresent()){
             rep.deleteById(id);
         }

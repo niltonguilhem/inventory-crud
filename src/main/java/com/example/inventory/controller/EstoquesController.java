@@ -3,6 +3,8 @@ package com.example.inventory.controller;
 import com.example.inventory.domain.Estoque;
 import com.example.inventory.service.EstoqueService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -20,7 +22,7 @@ public class EstoquesController {
 
     @GetMapping("/{id}")
     public Optional<Estoque> get (@PathVariable("id") Long id ) {
-        return service.getEstoqueByid(id);
+        return service.getEstoqueById(id);
     }
 
     @GetMapping("/fabricante/{fabricante}")
@@ -36,10 +38,10 @@ public class EstoquesController {
     }*/
 
     @PostMapping
-    public String  post(@RequestBody Estoque estoque){
+    public ResponseEntity<Estoque> post(@RequestBody Estoque estoque){
         Estoque e = service.insert(estoque);
 
-        return "Item salvo com sucesso: " + e.getId();
+        return new ResponseEntity<>(e, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
