@@ -2,6 +2,7 @@ package com.example.inventory.controller;
 
 import com.example.inventory.domain.Estoque;
 import com.example.inventory.service.EstoqueService;
+import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class EstoquesController {
         return service.getEstoqueByFabricante(fabricante);
     }
 
-   /* @PostMapping  // Este é um método básico via save do POST.
+    /*@PostMapping  // Este é um método básico via save do POST.
     public String  post(@RequestBody Estoque estoque){
         Estoque e = service.save(estoque);
 
@@ -45,19 +46,30 @@ public class EstoquesController {
     }
 
     @PutMapping("/{id}")
-    public String put(@PathVariable("id") Long id, @RequestBody Estoque estoque) {
+    public ResponseEntity<Estoque> put(@PathVariable("id") Long id, @RequestBody Estoque estoque) {
 
         Estoque e = service.update(estoque, id);
 
-        return  "Item atualizado com sucesso: "+ e.getId();
+        return new ResponseEntity<>(e, HttpStatus.ALREADY_REPORTED);
     }
 
+
+    /*public String put(@PathVariable("id") Long id, @RequestBody Estoque estoque) {
+
+        Estoque e = service.update(estoque, id);
+
+        return null;
+        //return  "Item atualizado com sucesso: "+ e.getId();
+
+    }*/
+
     @DeleteMapping("/{id}")
-    public  String delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") Long id) {
 
         service.delete(id);
 
-        return "Item deletado com sucesso";
     }
+    /*    return "Item deletado com sucesso";
+    }*/
 
 }

@@ -34,7 +34,7 @@ public class EstoqueService {
    }
 
    public Estoque update(Estoque estoque,Long id) {
-        Assert.notNull(id,"Não foi possível atualizar o registro");
+        //Assert.notNull(id,"Não foi possível atualizar o registro");
 
         //Busca o item no banco de dados estoque
        Optional<Estoque> optional = getEstoqueById(id);
@@ -43,14 +43,16 @@ public class EstoqueService {
            //Copiar as propriedades
            db.setDescricao(estoque.getDescricao());
            db.setFabricante(estoque.getFabricante());
-           System.out.println("Item id: " + db.getId());
+          // System.out.println("Item id: " + db.getId());
 
            //Atualiza item de estoque
            rep.save(db);
 
            return db;
 
-       } else {
+       }
+
+       else {
            throw new RuntimeException("Não foi possível atualizar o registro");
        }
    }
