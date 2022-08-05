@@ -31,13 +31,6 @@ public class    EstoquesController {
         return service.getEstoqueByFabricante(fabricante);
     }
 
-    /*@PostMapping  // Este é um método básico via save do POST.
-    public String  post(@RequestBody Estoque estoque){
-        Estoque e = service.save(estoque);
-
-        return "Item salvo com sucesso: " + e.getId();
-    }*/
-
     @PostMapping
     public ResponseEntity<Estoque> post(@RequestBody Estoque estoque){
         Estoque e = service.save(estoque);
