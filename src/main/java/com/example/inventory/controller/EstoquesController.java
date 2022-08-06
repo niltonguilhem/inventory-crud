@@ -1,6 +1,7 @@
 package com.example.inventory.controller;
 
 import com.example.inventory.domain.Estoque;
+import com.example.inventory.domain.EstoqueResponse;
 import com.example.inventory.service.EstoqueService;
 import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -17,29 +19,41 @@ public class    EstoquesController {
     private EstoqueService service;
 
     @GetMapping()
-    public Iterable<Estoque> findAllEstoques(){
-        return service.findAllEstoques();
+    public ResponseEntity<List<EstoqueResponse>> getAllEstoque() {
+        List<Estoque> estoqueList = service.findAllEstoques();
+        List<EstoqueResponse> estoqueResponseList = estoqueList.stream().map(estoque -> new EstoqueResponse()
+                .withBuilderId(estoque.getId())
+                .withBuilderDescricao(estoque.getDescricao())
+                .withBuilderFabricante(estoque.getFabricante())).toList();
+
+        return new ResponseEntity<>(estoqueResponseList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public Optional<Estoque> get (@PathVariable("id") Long id ) {
-        return service.getEstoqueById(id);
+    public ResponseEntity<EstoqueResponse> getId(@PathVariable("id") Long id) {
+        Estoque estoque = service.getEstoqueById(id);
+        EstoqueResponse response = new EstoqueResponse()
+                .withBuilderId(estoque.getId())
+                .withBuilderDescricao(estoque.getDescricao())
+                .withBuilderFabricante(estoque.getFabricante());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 
     @GetMapping("/fabricante/{fabricante}")
-    public Iterable<Estoque> getEstoquesByFabricante (@PathVariable("fabricante") String fabricante) {
-        return service.getEstoqueByFabricante(fabricante);
+    public ResponseEntity<EstoqueResponse> getFabricante(@PathVariable("fabricante") String fabricante) {
+        Estoque estoque = (Estoque) service.getEstoqueByFabricante(fabricante);
+        EstoqueResponse response = new EstoqueResponse()
+                .withBuilderId(estoque.getId())
+                .withBuilderDescricao(estoque.getDescricao())
+                .withBuilderFabricante(estoque.getFabricante());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /*@PostMapping  // Este é um método básico via save do POST.
-    public String  post(@RequestBody Estoque estoque){
-        Estoque e = service.save(estoque);
-
-        return "Item salvo com sucesso: " + e.getId();
-    }*/
-
     @PostMapping
-    public ResponseEntity<Estoque> post(@RequestBody Estoque estoque){
+    public ResponseEntity<Estoque> post(@RequestBody Estoque estoque) {
         Estoque e = service.save(estoque);
 
         return new ResponseEntity<>(e, HttpStatus.CREATED);
@@ -53,23 +67,12 @@ public class    EstoquesController {
         return new ResponseEntity<>(e, HttpStatus.ALREADY_REPORTED);
     }
 
-
-    /*public String put(@PathVariable("id") Long id, @RequestBody Estoque estoque) {
-
-        Estoque e = service.update(estoque, id);
-
-        return null;
-        //return  "Item atualizado com sucesso: "+ e.getId();
-
-    }*/
-
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Long id) {
 
         service.delete(id);
 
     }
-    /*    return "Item deletado com sucesso";
-    }*/
+
 
 }

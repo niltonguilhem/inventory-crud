@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -20,11 +20,14 @@ public class EstoqueService {
         return repository.findAll();
     }
 
-    public Optional<Estoque> getEstoqueById(Long id){return repository.findById(id);}
+    public Estoque getEstoqueById(Long id){return repository.findById(id).get();}
 
-    public Iterable<Estoque> getEstoqueByFabricante(String fabricante) {return repository
+    public Optional<Estoque> getEstoqueByIdOptional(Long id) {
+        return repository.findById(id);
+    }
+
+    public Iterable<Estoque> getEstoqueByFabricante (String fabricante) { return repository
             .findByFabricante(fabricante);}
-
 
     public  Estoque save (Estoque estoque) {
        Assert.isNull(estoque.getId(), "Não foi possível inserir o registro");
@@ -35,9 +38,9 @@ public class EstoqueService {
         //Assert.notNull(id,"Não foi possível atualizar o registro");
 
         //Busca o item no banco de dados estoque
-       Optional<Estoque> optional = getEstoqueById(id);
+       Optional<Estoque> optional = getEstoqueByIdOptional(estoque.getId());
        if (optional.isPresent()){
-           Estoque estoqueEntity = optional.get();
+           Estoque estoqueEntity = estoque;
            //Copiar as propriedades
            estoqueEntity.setDescricao(estoque.getDescricao());
            estoqueEntity.setFabricante(estoque.getFabricante());
@@ -49,24 +52,16 @@ public class EstoqueService {
            return estoqueEntity;
        }
        else {
-           throw new RuntimeException("Não foi possível atualizar o registro");
+           throw new RuntimeException();
        }
    }
 
    public void delete(Long id){
-        Optional<Estoque> estoque = getEstoqueById(id);
+        Optional<Estoque> estoque = getEstoqueByIdOptional(id);
         if (estoque.isPresent()){
             repository.deleteById(id);
         }
    }
 
-    public List<Estoque> getEstoquesFake() {
-        List<Estoque> estoques = new ArrayList<>();
 
-        estoques.add(new Estoque(1L, "Óleo", "Motul"));
-        estoques.add(new Estoque(2L,"Filtro de Óleo", "Fran"));
-        estoques.add(new Estoque(3L,"Filtro de Ar","Fran"));
-
-        return estoques;
-    }
 }

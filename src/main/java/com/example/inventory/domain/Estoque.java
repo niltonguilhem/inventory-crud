@@ -19,13 +19,6 @@ public class Estoque {
 
     }
 
-    public  Estoque(Long id, String descricao, String fabricante) {
-        this.id = id;
-        this.descricao = descricao;
-        this.fabricante = fabricante;
-
-    }
-
     public  Long getId() { return id;}
 
     public void setId(Long id) {
@@ -46,5 +39,20 @@ public class Estoque {
 
     public void setFabricante(String fabricante) {
         this.fabricante = fabricante;
+    }
+
+    public Estoque withBuilderDescricao(String descricao){
+        setDescricao(descricao);
+        return this;
+    }
+
+    public Estoque withBuilderFabricante(String fabricante){
+        setFabricante(fabricante);
+        return this;
+    }
+
+    public Estoque withBuilderId(Long id){
+        setId(id);
+        return this;
     }
 }
