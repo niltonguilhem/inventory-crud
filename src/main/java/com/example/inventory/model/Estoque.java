@@ -1,4 +1,4 @@
-package com.example.inventory.domain;
+package com.example.inventory.model;
 
 import javax.persistence.*;
 
