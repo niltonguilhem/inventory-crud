@@ -72,11 +72,14 @@ public class EstoqueService {
    }
 
    public void delete(Long id){
-        Optional<Estoque> estoque = getEstoqueByIdOptional(id);
        logger.info("m=delete - status=start " + id);
+        Optional<Estoque> estoque = getEstoqueByIdOptional(id);
         if (estoque.isPresent()){
             logger.info("m=delete - status=finish " + id);
             repository.deleteById(id);
+        }else {
+            logger.warn("m=delete - status=warn " + id);
+            throw new RuntimeException("O id informado é inexistente.");
         }
    }
 
