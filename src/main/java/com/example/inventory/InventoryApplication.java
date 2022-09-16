@@ -15,7 +15,7 @@ public class InventoryApplication {
 	public static void main(String[] args) throws NamingException, JMXServerErrorException {
 		logger.info("Iniciando a api controle de vagas");
 		SpringApplication.run(InventoryApplication.class, args);
-		logger.info("API de controle de vaga iniciada e pronta para receber requisições");
+		logger.info("API de controle de estoque iniciado e pronta para receber requisições");
 	}
 
 }
