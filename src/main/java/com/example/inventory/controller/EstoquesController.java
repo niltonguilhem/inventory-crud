@@ -4,6 +4,7 @@ import com.example.inventory.model.Estoque;
 import com.example.inventory.model.EstoqueRequest;
 import com.example.inventory.model.EstoqueResponse;
 import com.example.inventory.service.EstoqueService;
+import com.example.inventory.utils.EstoqueUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,8 +63,9 @@ public class    EstoquesController {
 
    @PostMapping
    public ResponseEntity<EstoqueResponse> postEstoque(@RequestBody EstoqueRequest estoqueRequest,
-                                                      @RequestHeader(value = "Partner") String Partner){
-       logger.info("m=postEstoque - status=start " + Partner);
+                                                      @RequestHeader String partner) throws Exception {
+       EstoqueUtils.validatedHeader(partner);
+       logger.info("m=postEstoque - status=start " + partner);
        Estoque estoque = service.save(new Estoque()
                .withBuilderDescricao(estoqueRequest.getDescricao())
                .withBuilderFabricante(estoqueRequest.getFabricante()));
@@ -72,15 +74,16 @@ public class    EstoquesController {
                .withBuilderId(estoque.getId())
                .withBuilderDescricao(estoque.getDescricao())
                .withBuilderFabricante(estoque.getFabricante());
-       logger.info("m=postEstoque - status=finish " + Partner);
+       logger.info("m=postEstoque - status=finish " + partner);
        return new ResponseEntity<>(response,HttpStatus.CREATED);
    }
 
     @PutMapping("/{id}")
     public ResponseEntity<EstoqueResponse> putEstoque (@PathVariable("id")Long id,
                                                        @RequestBody EstoqueRequest estoqueRequest,
-                                                       @RequestHeader(value = "Partner") String Partner){
-        logger.info("m=putEstoque - status=start " + id + " " +Partner);
+                                                       @RequestHeader String partner) throws Exception {
+        EstoqueUtils.validatedHeader(partner);
+        logger.info("m=putEstoque - status=start " + id + " " +partner);
         Estoque estoqueUpdate = service.update(new Estoque()
                 .withBuilderId(id)
                 .withBuilderDescricao(estoqueRequest.getDescricao())
@@ -90,7 +93,7 @@ public class    EstoquesController {
                 .withBuilderId(estoqueUpdate.getId())
                 .withBuilderDescricao(estoqueUpdate.getDescricao())
                 .withBuilderFabricante(estoqueUpdate.getFabricante());
-        logger.info("m=putEstoque - status=finish " + id + " " + Partner);
+        logger.info("m=putEstoque - status=finish " + id + " " + partner);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
