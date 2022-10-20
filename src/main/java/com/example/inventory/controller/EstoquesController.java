@@ -80,7 +80,7 @@ public class    EstoquesController {
     public ResponseEntity<EstoqueResponse> putEstoque (@PathVariable("id")Long id,
                                                        @RequestBody EstoqueRequest estoqueRequest,
                                                        @RequestHeader(value = "Partner") String Partner){
-        logger.info("m=putEstoque - status=start " + id + Partner);
+        logger.info("m=putEstoque - status=start " + id + " " +Partner);
         Estoque estoqueUpdate = service.update(new Estoque()
                 .withBuilderId(id)
                 .withBuilderDescricao(estoqueRequest.getDescricao())
@@ -90,7 +90,7 @@ public class    EstoquesController {
                 .withBuilderId(estoqueUpdate.getId())
                 .withBuilderDescricao(estoqueUpdate.getDescricao())
                 .withBuilderFabricante(estoqueUpdate.getFabricante());
-        logger.info("m=putEstoque - status=finish " + id + Partner);
+        logger.info("m=putEstoque - status=finish " + id + " " + Partner);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
