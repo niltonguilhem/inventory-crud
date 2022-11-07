@@ -1,6 +1,7 @@
 package com.example.inventory.service;
 
 import com.example.inventory.controller.EstoquesController;
+import com.example.inventory.handler.exception.EntidadeInexistenteException;
 import com.example.inventory.model.Estoque;
 import com.example.inventory.repository.EstoqueRepository;
 import org.slf4j.Logger;
@@ -29,7 +30,9 @@ public class EstoqueService {
 
     public Estoque getEstoqueById(Long id){
         logger.info("m=getEstoqueById - status=start " + id);
-        Estoque estoque = repository.findById(id).get();
+        Estoque estoque = repository.findById(id)
+                        .orElseThrow(() -> new EntidadeInexistenteException(
+                                String.format("Não existe vaga com este id %d",id)));
         logger.info("m=getEstoqueById - status=finish " + id);
         return estoque;
     }
@@ -48,10 +51,10 @@ public class EstoqueService {
     }
 
     public  Estoque save (Estoque estoque) {
-        logger.info("m=save - status=start ");
-       Assert.isNull(estoque.getId(), "Não foi possível inserir o registro");
+       logger.info("m=save - status=start ");
+       Estoque estoqueSave = repository.save(estoque);
         logger.info("m=save - status=finish ");
-       return repository.save(estoque);
+       return estoqueSave;
    }
 
    public Estoque update(Estoque estoque) {
@@ -67,7 +70,8 @@ public class EstoqueService {
        }
        else {
            logger.warn("m=update - status=warn " + estoque.getId());
-           throw new RuntimeException();
+           throw new EntidadeInexistenteException(String.format
+                   ("O id %d informado é inexistente.", estoque.getId()));
        }
    }
 
@@ -79,7 +83,8 @@ public class EstoqueService {
             repository.deleteById(id);
         }else {
             logger.warn("m=delete - status=warn " + id);
-            throw new RuntimeException("O id informado é inexistente.");
+            throw new EntidadeInexistenteException(String.format
+                    ("O id %d informado é inexistente.", id));
         }
    }
 

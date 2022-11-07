@@ -1,5 +1,8 @@
 package com.example.inventory.controller;
 
+import com.example.inventory.handler.exception.EntidadeInexistenteException;
+import com.example.inventory.handler.exception.FabricanteException;
+import com.example.inventory.handler.exception.PartnerException;
 import com.example.inventory.model.Estoque;
 import com.example.inventory.model.EstoqueRequest;
 import com.example.inventory.model.EstoqueResponse;
@@ -50,7 +53,9 @@ public class    EstoquesController {
     }
 
     @GetMapping("/fabricante/{fabricante}")
-    public ResponseEntity<List<EstoqueResponse>> getFabricante(@PathVariable("fabricante") String fabricante) {
+    public ResponseEntity<List<EstoqueResponse>> getFabricante(@PathVariable("fabricante") String fabricante)
+            throws FabricanteException {
+        EstoqueUtils.validateFabricante(fabricante);
         logger.info("m=getFabricante - status=start " + fabricante);
         List<Estoque> estoqueList = service.getEstoqueByFabricante(fabricante);
         List<EstoqueResponse> response = estoqueList.stream().map(estoque -> new EstoqueResponse()
@@ -61,10 +66,12 @@ public class    EstoquesController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-   @PostMapping
-   public ResponseEntity<EstoqueResponse> postEstoque(@RequestBody EstoqueRequest estoqueRequest,
-                                                      @RequestHeader String partner) throws Exception {
+   @PostMapping("/fabricante/{fabricante}")
+   public ResponseEntity<EstoqueResponse> postEstoque(@PathVariable("fabricante") String fabricante,
+                                                      @RequestBody EstoqueRequest estoqueRequest,
+                                                      @RequestHeader String partner) throws PartnerException,FabricanteException{
        EstoqueUtils.validatedHeader(partner);
+       EstoqueUtils.validateFabricante(fabricante);
        logger.info("m=postEstoque - status=start " + partner);
        Estoque estoque = service.save(new Estoque()
                .withBuilderDescricao(estoqueRequest.getDescricao())
@@ -81,7 +88,7 @@ public class    EstoquesController {
     @PutMapping("/{id}")
     public ResponseEntity<EstoqueResponse> putEstoque (@PathVariable("id")Long id,
                                                        @RequestBody EstoqueRequest estoqueRequest,
-                                                       @RequestHeader String partner) throws Exception {
+                                                       @RequestHeader String partner) throws PartnerException {
         EstoqueUtils.validatedHeader(partner);
         logger.info("m=putEstoque - status=start " + id + " " +partner);
         Estoque estoqueUpdate = service.update(new Estoque()
