@@ -12,6 +12,7 @@ public class Estoque {
     private Long id;
     @Column(name = "descricao")
     private String descricao;
+
     @Column(name = "fabricante")
     private String fabricante;
 

@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,12 +67,11 @@ public class    EstoquesController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-   @PostMapping("/fabricante/{fabricante}")
-   public ResponseEntity<EstoqueResponse> postEstoque(@PathVariable("fabricante") String fabricante,
-                                                      @RequestBody EstoqueRequest estoqueRequest,
+   @PostMapping
+   public ResponseEntity<EstoqueResponse> postEstoque(@RequestBody @Valid EstoqueRequest estoqueRequest,
                                                       @RequestHeader String partner) throws PartnerException,FabricanteException{
        EstoqueUtils.validatedHeader(partner);
-       EstoqueUtils.validateFabricante(fabricante);
+       EstoqueUtils.validateFabricante(estoqueRequest.getFabricante());
        logger.info("m=postEstoque - status=start " + partner);
        Estoque estoque = service.save(new Estoque()
                .withBuilderDescricao(estoqueRequest.getDescricao())

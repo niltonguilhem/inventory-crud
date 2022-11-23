@@ -1,9 +1,13 @@
 package com.example.inventory.model;
 
+import javax.validation.constraints.NotNull;
+
 public class EstoqueRequest {
 
 
     private String descricao;
+
+    @NotNull
     private String fabricante;
 
     public EstoqueRequest(){

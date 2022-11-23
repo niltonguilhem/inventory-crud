@@ -29,6 +29,7 @@ public class EstoqueUtils {
         return null;
     }
 
+
     public static Boolean validateFabricante(String fabricante) throws FabricanteException {
         logger.info("m=validatedFabricante - status=start ");
         if (!ObjectUtils.isEmpty(fabricante))
@@ -38,7 +39,7 @@ public class EstoqueUtils {
                 return true;
             } else {
                 logger.warn("m=FabricanteException - status=warn ");
-                throw new PartnerException(String.format
+                throw new FabricanteException(String.format
                         ("O fabricante informado é inválido."));
 
             }
