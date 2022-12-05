@@ -56,7 +56,7 @@ public class    EstoquesController {
     @GetMapping("/fabricante/{fabricante}")
     public ResponseEntity<List<EstoqueResponse>> getFabricante(@PathVariable("fabricante") String fabricante)
             throws FabricanteException {
-        EstoqueUtils.validateFabricante(fabricante);
+        EstoqueUtils.validatedFabricante(fabricante);
         logger.info("m=getFabricante - status=start " + fabricante);
         List<Estoque> estoqueList = service.getEstoqueByFabricante(fabricante);
         List<EstoqueResponse> response = estoqueList.stream().map(estoque -> new EstoqueResponse()
@@ -70,8 +70,7 @@ public class    EstoquesController {
    @PostMapping
    public ResponseEntity<EstoqueResponse> postEstoque(@RequestBody @Valid EstoqueRequest estoqueRequest,
                                                       @RequestHeader String partner) throws PartnerException,FabricanteException{
-       EstoqueUtils.validatedHeader(partner);
-       EstoqueUtils.validateFabricante(estoqueRequest.getFabricante());
+       EstoqueUtils.validated(partner, estoqueRequest.getFabricante());
        logger.info("m=postEstoque - status=start " + partner);
        Estoque estoque = service.save(new Estoque()
                .withBuilderDescricao(estoqueRequest.getDescricao())
@@ -84,6 +83,8 @@ public class    EstoquesController {
        logger.info("m=postEstoque - status=finish " + partner);
        return new ResponseEntity<>(response,HttpStatus.CREATED);
    }
+
+
 
     @PutMapping("/{id}")
     public ResponseEntity<EstoqueResponse> putEstoque (@PathVariable("id")Long id,

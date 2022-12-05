@@ -7,6 +7,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.ObjectUtils;
 
 public class EstoqueUtils {
+
+    private String partner;
+    private String fabricante;
+
+    public static void validated(String partner, String fabricante) {
+
+        validatedPartner(partner);
+        validatedFabricante(fabricante);
+    }
+
+    public String getPartner() {
+        return partner;
+    }
+
+    public String getFabricante() {
+        return fabricante;
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(EstoqueUtils.class);
 
     public static void validatedHeader(String partner) throws PartnerException {
@@ -29,8 +47,7 @@ public class EstoqueUtils {
         return null;
     }
 
-
-    public static Boolean validateFabricante(String fabricante) throws FabricanteException {
+    public static Boolean validatedFabricante(String fabricante) throws FabricanteException {
         logger.info("m=validatedFabricante - status=start ");
         if (!ObjectUtils.isEmpty(fabricante))
             if (fabricante.equals("Motul") || fabricante.equals("Fran") || fabricante.equals("Bosh")
