@@ -1,6 +1,7 @@
 package com.example.inventory.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table (name = "estoque")

@@ -1,6 +1,8 @@
 package com.example.inventory.model;
 
+
 import javax.validation.constraints.NotNull;
+
 
 public class EstoqueRequest {
 
