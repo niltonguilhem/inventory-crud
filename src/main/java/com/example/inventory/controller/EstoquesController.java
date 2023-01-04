@@ -1,6 +1,5 @@
 package com.example.inventory.controller;
 
-import com.example.inventory.handler.exception.EntidadeInexistenteException;
 import com.example.inventory.handler.exception.FabricanteException;
 import com.example.inventory.handler.exception.PartnerException;
 import com.example.inventory.model.Estoque;

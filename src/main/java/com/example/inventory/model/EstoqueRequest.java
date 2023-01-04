@@ -16,12 +16,6 @@ public class EstoqueRequest {
 
     }
 
-    public  EstoqueRequest(String descricao, String fabricante) {
-
-        this.descricao = descricao;
-        this.fabricante = fabricante;
-
-    }
 
     public String getDescricao() {
         return descricao;
