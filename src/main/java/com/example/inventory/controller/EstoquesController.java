@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,6 +22,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/estoques")
+@ControllerAdvice
+@Validated
 public class    EstoquesController {
 
     private static final Logger logger = LoggerFactory.getLogger(EstoquesController.class);
@@ -86,6 +89,7 @@ public class    EstoquesController {
 
 
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<EstoqueResponse> putEstoque (@PathVariable("id")Long id,
                                                        @RequestBody EstoqueRequest estoqueRequest,
                                                        @RequestHeader String partner) throws PartnerException {

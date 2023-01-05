@@ -102,14 +102,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return  ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(problem);
     }
-    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public ResponseEntity<Problem> handlerHttpMediaTypeNotSupportedException(){
-        Problem problem = new Problem()
-                .withBuilderTimestamp(LocalDateTime.now())
-                .withBuilderUserMessage("O tipo de mídia não é aceito.");
-        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-                .body(problem);
-    }
 
     @ExceptionHandler(FabricanteException.class)
     public ResponseEntity<Problem> handlerExceptionFabricanteException(){

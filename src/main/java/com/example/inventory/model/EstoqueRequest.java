@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 
 public class EstoqueRequest {
 
-
+    @NotNull
     private String descricao;
 
     @NotNull
