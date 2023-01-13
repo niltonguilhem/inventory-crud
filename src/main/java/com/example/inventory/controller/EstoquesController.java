@@ -7,6 +7,9 @@ import com.example.inventory.model.EstoqueRequest;
 import com.example.inventory.model.EstoqueResponse;
 import com.example.inventory.service.EstoqueService;
 import com.example.inventory.utils.EstoqueUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +22,9 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Api(tags = "Estoque")
 @RestController
 @RequestMapping("/api/v1/estoques")
-@ControllerAdvice
 @Validated
 public class    EstoquesController {
 
@@ -30,6 +32,7 @@ public class    EstoquesController {
     @Autowired
     private EstoqueService service;
 
+    @ApiOperation("Lista todos os itens do estoque.")
     @GetMapping()
     public ResponseEntity<List<EstoqueResponse>> getAllEstoque() {
         logger.info("m=getAllEstoque - status=start");
@@ -42,8 +45,9 @@ public class    EstoquesController {
         return new ResponseEntity<>(estoqueResponseList, HttpStatus.OK);
     }
 
+    @ApiOperation("Busca um item pelo ID.")
     @GetMapping("/{id}")
-    public ResponseEntity<EstoqueResponse> getIdEstoque(@PathVariable("id") Long id) {
+    public ResponseEntity<EstoqueResponse> getIdEstoque(@ApiParam("ID de um Item do Estoque") @PathVariable("id") Long id) {
         logger.info("m=getIdEstoque - status=start " + id);
         Estoque estoque = service.getEstoqueById(id);
         EstoqueResponse response = new EstoqueResponse()
@@ -55,6 +59,7 @@ public class    EstoquesController {
 
     }
 
+    @ApiOperation("Lista todos os itens pelo nome do fabricante." )
     @GetMapping("/fabricante/{fabricante}")
     public ResponseEntity<List<EstoqueResponse>> getFabricante(@PathVariable("fabricante") String fabricante)
             throws FabricanteException {
@@ -68,10 +73,13 @@ public class    EstoquesController {
         logger.info("m=getFabricante - status=finish " + fabricante);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
+   @ApiOperation("Cadastra item e fabricante no estoque.")
    @PostMapping
-   public ResponseEntity<EstoqueResponse> postEstoque(@RequestBody @Valid EstoqueRequest estoqueRequest,
-                                                      @RequestHeader String partner) throws PartnerException,FabricanteException{
+   public ResponseEntity<EstoqueResponse> postEstoque(
+           @RequestBody @Valid EstoqueRequest estoqueRequest,
+
+           @ApiParam( value = "Parceiros aceitos: Americanas, Amazon, Apple")
+           @RequestHeader String partner) throws PartnerException,FabricanteException{
        EstoqueUtils.validated(partner, estoqueRequest.getFabricante());
        logger.info("m=postEstoque - status=start " + partner);
        Estoque estoque = service.save(new Estoque()
@@ -87,12 +95,17 @@ public class    EstoquesController {
    }
 
 
-
+    @ApiOperation("Edita itens e fabricantes por ID.")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<EstoqueResponse> putEstoque (@PathVariable("id")Long id,
-                                                       @RequestBody EstoqueRequest estoqueRequest,
-                                                       @RequestHeader String partner) throws PartnerException {
+    public ResponseEntity<EstoqueResponse> putEstoque (
+            @ApiParam(value = "Informar o ID para editar um Item de Estoque")
+            @PathVariable("id")Long id,
+
+            @RequestBody EstoqueRequest estoqueRequest,
+
+            @ApiParam( value = "Parceiros aceitos: Americanas, Amazon, Apple")
+            @RequestHeader String partner) throws PartnerException {
         EstoqueUtils.validatedHeader(partner);
         logger.info("m=putEstoque - status=start " + id + " " +partner);
         Estoque estoqueUpdate = service.update(new Estoque()
@@ -108,8 +121,11 @@ public class    EstoquesController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
+    @ApiOperation("Exclui itens por ID")
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id) {
+    public void delete(
+            @ApiParam(value = "ID de um Item do estoque")
+            @PathVariable("id") Long id) {
         logger.info("m=delete - status=start " + id);
         service.delete(id);
         logger.info("m=delete - status=finish " + id);
