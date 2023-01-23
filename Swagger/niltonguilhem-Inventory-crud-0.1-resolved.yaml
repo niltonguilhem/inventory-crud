@@ -1,0 +1,133 @@
+---
+openapi: 3.0.0
+info:
+  title: API Inventory-CRUD
+  description: Uma API para gerenciar estoque
+  version: "0.1"
+servers:
+- url: https://virtserver.swaggerhub.com/niltonguilhem/Inventory-crud/0.1
+  description: SwaggerHub API Auto Mocking
+paths:
+  /estoques:
+    description: Esse endpoint deverá ser usado sempre em que for necessário fazer requisições onde não há parametro no path.
+    post:
+      tags:
+      - Estoque
+      description: Essa operação insere um **novo item** no banco de dados
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EstoqueRequest'
+      responses:
+        "201":
+          description: Item de estoque cadastrado com sucesso!
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "5XX":
+          description: Erro no servidor! Tente novamente mais tarde!
+  /estoques/{id}:
+    get:
+      tags:
+      - Estoque
+      description: Esse metodo retorna os dados de um item no estoque.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Item encontrado!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EstoqueResponse'
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Item não encontrado no Estoque!
+    put:
+      tags:
+      - Estoque
+      description: Esse metodo altera os dados de um item no estoque.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        description: Novos dados para o item em Estoque.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EstoqueRequest'
+      responses:
+        "200":
+          description: Item encontrado!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EstoqueResponse'
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Item não encontrado no Estoque!
+    delete:
+      tags:
+      - Estoque
+      description: Esse metodo apaga o registro de um item no estoque.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "204":
+          description: Item encontrado!
+        "404":
+          description: Item não encontrado no Estoque!
+components:
+  schemas:
+    Estoque:
+      type: object
+      properties:
+        id:
+          type: integer
+        descricao:
+          type: string
+        fabricante:
+          type: string
+    EstoqueRequest:
+      type: object
+      properties:
+        descricao:
+          type: string
+        fabricante:
+          type: string
+    EstoqueResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        descricao:
+          type: string
+        fabricante:
+          type: string
